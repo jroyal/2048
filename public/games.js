@@ -6,6 +6,8 @@ let lastGrid = null;
 let moveCount = 0;
 let gameOver = false;
 let mergeMap = new Set();
+let startX = 0;
+let startY = 0;
 
 function createTileElement(value, index) {
 	const tile = document.createElement('div');
@@ -205,37 +207,34 @@ function handleKeyDown(e) {
 }
 
 function setupTouchControls() {
-	let startX = 0;
-	let startY = 0;
+	window.addEventListener(
+		'touchstart',
+		(e) => {
+			if (e.touches.length === 1) {
+				e.preventDefault();
+				startX = e.touches[0].clientX;
+				startY = e.touches[0].clientY;
+			}
+		},
+		{ passive: false }
+	);
 
-	window.addEventListener('touchstart', (e) => {
-		const touch = e.touches[0];
-		startX = touch.clientX;
-		startY = touch.clientY;
-	});
+	window.addEventListener(
+		'touchend',
+		(e) => {
+			const dx = e.changedTouches[0].clientX - startX;
+			const dy = e.changedTouches[0].clientY - startY;
 
-	window.addEventListener('touchend', (e) => {
-		const touch = e.changedTouches[0];
-		const dx = touch.clientX - startX;
-		const dy = touch.clientY - startY;
-
-		if (Math.abs(dx) > Math.abs(dy)) {
-			if (dx > 30) handleMove('right');
-			else if (dx < -30) handleMove('left');
-		} else {
-			if (dy > 30) handleMove('down');
-			else if (dy < -30) handleMove('up');
-		}
-	});
-}
-
-if ('serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker
-			.register('/service-worker.js')
-			.then((reg) => console.log('Service worker registered:', reg.scope))
-			.catch((err) => console.error('Service worker failed:', err));
-	});
+			if (Math.abs(dx) > Math.abs(dy)) {
+				if (dx > 30) handleMove('right');
+				else if (dx < -30) handleMove('left');
+			} else {
+				if (dy > 30) handleMove('down');
+				else if (dy < -30) handleMove('up');
+			}
+		},
+		{ passive: false }
+	);
 }
 
 document.getElementById('redo').addEventListener('click', handleRedo);
