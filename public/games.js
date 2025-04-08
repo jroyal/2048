@@ -63,10 +63,15 @@ function updateRedoButton() {
 	const redoButton = document.getElementById('redo');
 	if (lastGrid) {
 		redoButton.disabled = false;
-		redoButton.classList.remove('opacity-50', 'cursor-not-allowed');
+		redoButton.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+		redoButton.classList.add('pointer-events-auto');
+		redoButton.style.display = 'none';
+		void redoButton.offsetHeight;
+		redoButton.style.display = '';
 	} else {
 		redoButton.disabled = true;
-		redoButton.classList.add('opacity-50', 'cursor-not-allowed');
+		redoButton.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+		redoButton.classList.remove('pointer-events-auto');
 	}
 }
 
