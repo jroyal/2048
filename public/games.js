@@ -3,12 +3,14 @@ let grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
 let lastGrid = null;
 let moveCount = 0;
 let gameOver = false;
+let mergeMap = new Set();
 
 function createTileElement(value, index) {
   const tile = document.createElement("div");
-  const baseClasses = "w-20 h-20 flex items-center justify-center text-xl font-bold rounded shadow";
+  const baseClasses = "w-20 h-20 flex items-center justify-center text-xl font-bold rounded shadow transition-transform duration-150";
   const bgClass = getTileColor(value);
-  tile.className = `${baseClasses} ${bgClass}`;
+  const animationClass = (value !== 0 && mergeMap.has(index)) ? "animate-ping-short" : "";
+  tile.className = `${baseClasses} ${bgClass} ${animationClass}`;
   tile.textContent = value !== 0 ? value : "";
   return tile;
 }
@@ -37,6 +39,7 @@ function renderGrid() {
   grid.flat().forEach((val, i) => gridEl.appendChild(createTileElement(val, i)));
   document.getElementById("moveCount").textContent = moveCount;
   updateRedoButton();
+  mergeMap.clear();
 }
 
 function updateRedoButton() {
@@ -82,6 +85,8 @@ function slideAndMerge(row, rowIndex) {
     if (nonZero[i] === nonZero[i + 1]) {
       const newVal = nonZero[i] * 2;
       merged.push(newVal);
+      const col = merged.length - 1;
+      mergeMap.add(rowIndex * GRID_SIZE + col);
       i++;
     } else {
       merged.push(nonZero[i]);
@@ -157,6 +162,7 @@ function restartGame() {
   lastGrid = null;
   moveCount = 0;
   gameOver = false;
+  mergeMap.clear();
   document.getElementById("winMessage").classList.add("hidden");
   document.getElementById("gameOverScreen").classList.add("hidden");
   addRandomTile();

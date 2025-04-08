@@ -10,6 +10,19 @@
 			body {
 				touch-action: manipulation;
 			}
+
+			@keyframes ping-short {
+				0%,
+				100% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.15);
+				}
+			}
+			.animate-ping-short {
+				animation: ping-short 0.2s ease-in-out;
+			}
 		</style>
 	</head>
 	<body class="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
