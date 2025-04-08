@@ -7,9 +7,7 @@
 	"name": "game2048",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-07",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./public"
@@ -17,8 +15,13 @@
 	"observability": {
 		"enabled": true
 	},
-	"route": "2048.hypersloth.io"
-	
+	"routes": [
+		{
+			"pattern": "2048.hypersloth.io/*",
+			"zone_id": "f26899c9ac5bea9fcc538b11963ebe78"
+		}
+	]
+
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
